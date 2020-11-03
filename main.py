@@ -98,6 +98,37 @@ class convolution:
 
         return output_image
 
+class CNN():
+
+    def __init__(self):
+        self.self = self
+
+    def convolve3d(self, img, num_filters):
+
+        self.filters = np.random.randn(3, 3, 3) / 9
+
+        filter = np.flipud(np.fliplr(self.filters))
+
+        k_l = filter.shape[0]
+        k_h = filter.shape[1]
+
+        # Zero Padding
+        pad = (k_l - 1) // 2
+        total_pad = 2 * pad
+
+        padded_image = np.zeros((img.shape[0] + total_pad, img.shape[1] + total_pad, 3))
+        padded_image[pad:-pad, pad:-pad, :] = img
+
+        l, h, d = img.shape
+        output_image = np.zeros((l, h, num_filters))
+
+        for i in range(padded_image.shape[0] - total_pad):
+            for j in range(padded_image.shape[1] - total_pad):
+                output_image[i, j] = np.multiply(filter, padded_image[i: i + k_l, j: j + k_h]).sum()
+
+        return output_image
+
+
 if __name__ == '__main__':
 
     X_train, y_train, X_test, y_test, classes = load_dataset()
@@ -105,15 +136,41 @@ if __name__ == '__main__':
     image = X_train[2]
     image = image / 255
 
-    img = image[:, :, 0]
-
-    plt.imshow(img)
+    plt.imshow(image)
     plt.show()
 
     model = convolution()
     k = model.sharpen()
 
-    filterned_Image = model.convolve2d(img, k)
+    filterned_Image = model.convolve2d(image[:, :, 0], k)
     plt.imshow(filterned_Image)
     plt.show()
+
+    model = CNN()
+    filterned_Image = model.convolve3d(image, 5)
+    plt.imshow(filterned_Image[:, :, 0])
+    fig1 = plt.gcf()
+    plt.show()
+    fig1.savefig('convolve3d_filtered_image_1.png')
+
+    plt.imshow(filterned_Image[:, :, 1])
+    fig1 = plt.gcf()
+    plt.show()
+    fig1.savefig('convolve3d_filtered_image_2.png')
+
+    plt.imshow(filterned_Image[:, :, 2])
+    fig1 = plt.gcf()
+    plt.show()
+    fig1.savefig('convolve3d_filtered_image_3.png')
+
+    plt.imshow(filterned_Image[:, :, 3])
+    fig1 = plt.gcf()
+    plt.show()
+    fig1.savefig('convolve3d_filtered_image_4.png')
+
+    plt.imshow(filterned_Image[:, :, 4])
+    fig1 = plt.gcf()
+    plt.show()
+    fig1.savefig('convolve3d_filtered_image_5.png')
+
 

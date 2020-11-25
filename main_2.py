@@ -108,37 +108,7 @@ class convolution:
                       [0, 0, -1, 0, 0]])
         return a
 
-    def convolve2d(self, img, kernel, padding):
-
-        filter = np.flipud(np.fliplr(kernel))
-
-        k_l = filter.shape[0]
-        k_h = filter.shape[1]
-
-        if padding == 'SAME':
-            # Zero Padding
-            pad = (k_l - 1) // 2
-            total_pad = 2 * pad
-
-            padded_image = np.zeros((img.shape[0] + total_pad, img.shape[1] + total_pad))
-            padded_image[pad:-pad, pad:-pad] = img
-
-            output_image = np.zeros(img.shape)
-
-            for i in range(padded_image.shape[0] - total_pad):
-                for j in range(padded_image.shape[1] - total_pad):
-                    output_image[i, j] = np.multiply(filter, padded_image[i: i + k_l, j: j + k_h]).sum()
-
-        else:
-            output_image = np.zeros((img.shape[0] - k_l + 1, img.shape[1] - k_h + 1))
-
-            for i in range(output_image.shape[0]):
-                for j in range(output_image.shape[1]):
-                    output_image[i, j] = np.multiply(filter, img[i: i + k_l, j: j + k_h]).sum()
-
-        return output_image
-
-    def convolve2d_trial(self, img, kernel, padding=None, stride=None):
+    def convolve2d(self, img, kernel, padding=None, stride=None):
 
         filter = np.flipud(np.fliplr(kernel))
 
